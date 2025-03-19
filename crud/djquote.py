@@ -15,6 +15,8 @@ def get_all_quotes(db: Session):
 def choose_and_store_random_quote(db: Session):
     random_quote = db.query(models.DarrenQuote).order_by(func.random()).first()
     random_author = db.query(models.DarrenNames).order_by(func.random()).first()
+    while random_quote.id == get_current_other_quote_id(db):
+        random_quote = db.query(models.DarrenQuote).order_by(func.random()).first()
     update_state_dj_quote_id(db, random_quote.id)
     update_state_dj_author_id(db, random_author.id)
     update_state_quote_date(db)
@@ -88,3 +90,10 @@ def add_new_quote(db: Session, quote_text):
     db.commit()
     db.refresh(new_quote)
     return True
+
+def delete_quote_by_id(db: Session, quote_id: int):
+    to_delete = db.query(models.DarrenQuote).filter(models.DarrenQuote.id == quote_id).delete()
+    if to_delete:
+        db.commit()
+        return True
+    return False

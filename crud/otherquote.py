@@ -12,6 +12,8 @@ def get_all_quotes(db: Session):
 
 def choose_and_store_random_quote(db: Session):
     random_quote = db.query(models.OtherQuote).order_by(func.random()).first()
+    while random_quote.id == get_current_other_quote_id(db):
+        random_quote = db.query(models.OtherQuote).order_by(func.random()).first()
     update_state_other_quote_id(db, random_quote.id)
     update_state_quote_date(db)
     return random_quote
@@ -50,3 +52,10 @@ def add_new_quote(db: Session, quote_text, quote_author):
     db.commit()
     db.refresh(new_quote)
     return True
+
+def delete_quote_by_id(db: Session, quote_id: int):
+    to_delete = db.query(models.OtherQuote).filter(models.OtherQuote.id == quote_id).delete()
+    if to_delete:
+        db.commit()
+        return True
+    return False

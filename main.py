@@ -4,7 +4,7 @@ from fastapi.openapi.docs import get_swagger_ui_html
 
 from . import models
 from .database import engine
-from .routers import home, djquote, otherquote, images
+from .routers import home, djquote, otherquote, images, time
 
 from pathlib import Path
 from os import path
@@ -39,3 +39,4 @@ app.include_router(home.router)
 app.include_router(djquote.router)
 app.include_router(otherquote.router)
 app.include_router(images.router)
+app.include_router(time.router)

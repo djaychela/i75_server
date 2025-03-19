@@ -11,14 +11,30 @@
 
    {% include 'navbar.html' %}
 
-<h1>Other Quotes</h1>
+   
+   <div class="stack" style="text-align: center;">>
+       <h1>Other Quotes</h1>
+    <form action="/otherquote/delete_quote" method="post">
+        <table class="primary" style="margin: 0 auto;">
+            <tr>
+                <th>Text</th>
+                <th>Delete</th>
+            </tr>
+            {% for quote in quotes %}
+            <tr>
+                <td>
+                    {{ quote.quote[:100] }} - {{ quote.author }}
+                </td>
+                <td>
+                    <button type="submit" name="action" class="error" value="delete_{{ quote.id }}">Delete {{
+                        quote.id
+                        }}</button>
+                </td>
+            </tr>
 
-<div>
-    {% for quote in quotes %}
-    <div>
-        <p>{{ quote.quote }} - {{ quote.author}} </p>
-    </div>
-    {% endfor %}
+            {% endfor %}
+
+        </table>
+    </form>
 </div>
-
 </body>

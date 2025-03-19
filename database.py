@@ -2,7 +2,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///storage/i75data.db"
+from pathlib import Path
+
+BASE_PATH = Path(__file__).resolve().parent
+SQLALCHEMY_DATABASE_URL = f"sqlite:////{BASE_PATH}/storage/i75data.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
