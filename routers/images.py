@@ -29,10 +29,10 @@ upload_path = BASE_PATH.parent / "uploads" / "images"
 async def index(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse("images/images.html", {"request": request})
 
+
 @router.get("/upload")
 async def upload(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse("images/upload.html", {"request": request})
-
 
 
 @router.post("/submit")

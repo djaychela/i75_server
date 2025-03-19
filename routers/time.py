@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends, Request, Form
-from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, JSONResponse
+from fastapi.responses import (
+    JSONResponse,
+)
 
 from datetime import datetime
 from json import dumps
 
 router = APIRouter(prefix="/time")
 
+
 @router.get("/", response_class=JSONResponse)
 async def time(request: Request):
-    date_time = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+    date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     date_time_dict = {"datetime": date_time}
     date_time_json = dumps(date_time_dict)
     return date_time_dict
-
-
-
 
 
 """

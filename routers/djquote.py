@@ -1,5 +1,10 @@
 from fastapi import APIRouter, Depends, Request, Form
-from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, JSONResponse
+from fastapi.responses import (
+    HTMLResponse,
+    PlainTextResponse,
+    RedirectResponse,
+    JSONResponse,
+)
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -35,10 +40,12 @@ async def random(request: Request, db: Session = Depends(get_db)):
     quote, author = djquote.choose_random_quote(db)
     return quote.quote
 
+
 @router.get("/randomjson", response_class=JSONResponse)
 async def random(request: Request, db: Session = Depends(get_db)):
     quote = djquote.get_random_quote_json(db)
     return quote
+
 
 @router.get("/randomhtml", response_class=HTMLResponse)
 async def random(request: Request, db: Session = Depends(get_db)):
@@ -59,6 +66,7 @@ async def create_quote(
 ):
     djquote.add_new_quote(db, content)
     return RedirectResponse("/djquote/list", status_code=303)
+
 
 @router.post("/delete_quote", response_class=HTMLResponse)
 async def delete_image(
