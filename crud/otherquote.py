@@ -3,14 +3,43 @@ from sqlalchemy.sql import func
 
 from .. import models
 
+from .state import *
+
 
 def get_all_quotes(db: Session):
     return db.query(models.OtherQuote).all()
 
 
+def choose_and_store_random_quote(db: Session):
+    random_quote = db.query(models.OtherQuote).order_by(func.random()).first()
+    update_state_other_quote_id(db, random_quote.id)
+    update_state_quote_date(db)
+    return random_quote
+
+
+def return_today_quote(db: Session):
+    quote_id = get_current_other_quote_id(db)
+    quote = db.query(models.OtherQuote).filter(models.OtherQuote.id == quote_id).first()
+    return quote
+
+
+def choose_random_quote(db: Session):
+    quoted_today = check_if_quote_today(db)
+    if not quoted_today:
+        quote = choose_and_store_random_quote(db)
+    else:
+        quote = return_today_quote(db)
+    return quote
+
+
 def get_random_quote_text(db: Session):
-    quote = db.query(models.OtherQuote).order_by(func.random()).first()
+    quote = choose_random_quote(db)
     return f"{quote.quote} - {quote.author}"
+
+
+def get_random_quote_json(db: Session):
+    quote = choose_random_quote(db)
+    return quote
 
 
 def add_new_quote(db: Session, quote_text, quote_author):
@@ -21,19 +50,3 @@ def add_new_quote(db: Session, quote_text, quote_author):
     db.commit()
     db.refresh(new_quote)
     return True
-
-# def import_from_text(db: Session):
-#     from pathlib import Path
-#     file_path = str(Path(__file__).parent.resolve())
-#     print(f"{file_path=}")
-                    
-#     with open(f"{file_path}/other_quotes.txt", "r") as file:
-#         for line in file.readlines():
-#             print(f"{line.strip().split("-")=}")
-#             quote_text, quote_author = line.strip().split("-")
-#             new_quote = models.OtherQuote()
-#             new_quote.quote = quote_text
-#             new_quote.author = quote_author
-#             db.add(new_quote)
-#             db.commit()
-#             db.refresh(new_quote)

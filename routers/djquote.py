@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, Request, Form
-from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
+from datetime import date
+
 from ..dependencies import get_db
 
-from ..crud import djquote
+from ..crud import djquote, state
 
 from pathlib import Path
 
@@ -30,7 +32,12 @@ async def list_quotes(request: Request, db: Session = Depends(get_db)):
 
 @router.get("/random", response_class=PlainTextResponse)
 async def random(request: Request, db: Session = Depends(get_db)):
-    quote = djquote.get_random_quote_text(db)
+    quote, author = djquote.choose_random_quote(db)
+    return quote.quote
+
+@router.get("/randomjson", response_class=JSONResponse)
+async def random(request: Request, db: Session = Depends(get_db)):
+    quote = djquote.get_random_quote_json(db)
     return quote
 
 

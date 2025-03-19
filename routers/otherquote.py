@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Request, Form
-from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -33,6 +33,10 @@ async def random(request: Request, db: Session = Depends(get_db)):
     quote = otherquote.get_random_quote_text(db)
     return quote
 
+@router.get("/randomjson", response_class=JSONResponse)
+async def random(request: Request, db: Session = Depends(get_db)):
+    quote = otherquote.get_random_quote_json(db)
+    return quote
 
 @router.get("/create", response_class=HTMLResponse)
 async def create_quote_form(request: Request, db: Session = Depends(get_db)):

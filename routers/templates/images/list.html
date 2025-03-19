@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <div class="stack" style="text-align: center;">
+        <h1>All Images</h1>
+        <div class="stack" style="text-align: center;"><a href="/images/upload"><button>Upload a New Image</button></a></div>
+        <form action="/images/delete_image" method="post">
+            <table class="primary" style="margin: 0 auto;">
+                <tr>
+                    <th>Image</th>
+                    <th>Text</th>
+                    <th>Delete</th>
+                </tr>
+                {% for image in images %}
+                <tr>
+                    <td>
+                        <img id="img" width="200px" src="/uploads/images/{{ image.filename }}"/>
+                    </td>
+                    <td>
+                        {{ image.text }}
+                    </td>
+                    <td>
+                        <button type="submit" name="action" class="error" value="delete_{{ image.id }}">Delete {{
+                            image.id
+                            }}</button>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </form>
+    </div>
+
+</body>
