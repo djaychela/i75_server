@@ -43,6 +43,7 @@ class State(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     quote_date = Column(Date)
+    other_quote_date = Column(Date)
     current_dj_quote_id = Column(Integer)
     current_dj_author_id = Column(Integer)
     current_other_quote_id = Column(Integer)

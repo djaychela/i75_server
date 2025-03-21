@@ -15,7 +15,7 @@ def choose_and_store_random_quote(db: Session):
     while random_quote.id == get_current_other_quote_id(db):
         random_quote = db.query(models.OtherQuote).order_by(func.random()).first()
     update_state_other_quote_id(db, random_quote.id)
-    update_state_quote_date(db)
+    update_state_other_quote_date(db)
     return random_quote
 
 
@@ -26,7 +26,7 @@ def return_today_quote(db: Session):
 
 
 def choose_random_quote(db: Session):
-    quoted_today = check_if_quote_today(db)
+    quoted_today = check_if_other_quote_today(db)
     if not quoted_today:
         quote = choose_and_store_random_quote(db)
     else:

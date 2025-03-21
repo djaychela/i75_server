@@ -13,23 +13,22 @@
 
 
     <div class="stack" style="text-align: center;">
-        <h1>Other Quotes</h1>
-        <div class="stack" style="text-align: center;"><a href="/otherquote/create"><button>Create a New
-                    Quote</button></a></div>
-        <form action="/otherquote/delete_quote" method="post">
+        <h1>Darren Names</h1>
+        <div class="stack" style="text-align: center;"><a href="/djnames/create"><button>Create a New Name</button></a></div>
+        <form action="/djnames/delete_name" method="post">
             <table class="primary" style="margin: 0 auto;">
                 <tr>
                     <th>Text</th>
                     <th>Delete</th>
                 </tr>
-                {% for quote in quotes %}
+                {% for name in names %}
                 <tr>
                     <td>
-                        {{ quote.quote[:100] }} - {{ quote.author }}
+                        {{ name.name }}
                     </td>
                     <td>
-                        <button type="submit" name="action" class="error" value="delete_{{ quote.id }}">Delete {{
-                            quote.id
+                        <button type="submit" name="action" class="error" value="delete_{{ name.id }}">Delete {{
+                            name.id
                             }}</button>
                     </td>
                 </tr>
@@ -39,4 +38,5 @@
             </table>
         </form>
     </div>
+
 </body>

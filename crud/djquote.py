@@ -19,7 +19,7 @@ def choose_and_store_random_quote(db: Session):
         random_quote = db.query(models.DarrenQuote).order_by(func.random()).first()
     update_state_dj_quote_id(db, random_quote.id)
     update_state_dj_author_id(db, random_author.id)
-    update_state_quote_date(db)
+    update_state_dj_quote_date(db)
     return (random_quote, random_author)
 
 
@@ -36,7 +36,7 @@ def return_today_quote(db: Session):
 
 
 def choose_random_quote(db: Session):
-    quoted_today = check_if_quote_today(db)
+    quoted_today = check_if_dj_quote_today(db)
     if not quoted_today:
         quote = choose_and_store_random_quote(db)
     else:
@@ -49,7 +49,7 @@ def get_random_quote_json(db: Session):
         quote: str
         author: str
 
-    quoted_today = check_if_quote_today(db)
+    quoted_today = check_if_dj_quote_today(db)
     if not quoted_today:
         quote, name = choose_and_store_random_quote(db)
     else:
@@ -70,13 +70,13 @@ def get_current_quote_author(db: Session):
 
 
 def get_random_quote_text(db: Session):
-    quoted_today = check_if_quote_today(db)
+    quoted_today = check_if_dj_quote_today(db)
     if not quoted_today:
         choose_and_store_random_quote(db)
 
 
 def get_random_quote_text(db: Session):
-    quoted_today = check_if_quote_today(db)
+    quoted_today = check_if_dj_quote_today(db)
     if not quoted_today:
         choose_and_store_random_quote(db)
     quote = db.query(models.DarrenQuote).order_by(func.random()).first()
