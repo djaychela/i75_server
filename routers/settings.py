@@ -25,6 +25,8 @@ ALL_MODES = [
     "jpg_viewer_2",
     "spiral",
     "car",
+    "note",
+    "bin_day",
 ]
 
 
@@ -87,6 +89,8 @@ async def store_settings(
     jpg_viewer_2: str = Form(""),
     spiral: str = Form(""),
     car: str = Form(""),
+    note: str = Form(""),
+    bin_day: str = Form(""),
     digital_clock_12_time: int = Form(""),
     quote_viewer_time: int = Form(""),
     cubes_time: int = Form(""),
@@ -99,6 +103,8 @@ async def store_settings(
     jpg_viewer_2_time: int = Form(""),
     spiral_time: int = Form(""),
     car_time: int = Form(""),
+    note_time: int = Form(""),
+    bin_day_time: int = Form(""),
 ):
 
     modes_to_check = {
@@ -114,6 +120,8 @@ async def store_settings(
         "jpg_viewer_2": jpg_viewer_2,
         "spiral": spiral,
         "car": car,
+        "note": note,
+        "bin_day": bin_day,
     }
 
     times_to_check = {
@@ -129,6 +137,8 @@ async def store_settings(
         "jpg_viewer_2": jpg_viewer_2_time,
         "spiral": spiral_time,
         "car": car_time,
+        "note": note_time,
+        "bin_day": bin_day_time,
     }
 
     modes_from_form = [key for key, value in modes_to_check.items() if value == "true"]

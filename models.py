@@ -31,6 +31,12 @@ class Reminder(Base):
     date = Column(String, index=True)
     time = Column(String, index=True)
 
+class Note(Base):
+    __tablename__ = "note_table"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    text = Column(String, index=True)
+
 class ImageData(Base):
     __tablename__ = "imagedata_table"
 
@@ -49,3 +55,5 @@ class State(Base):
     current_other_quote_id = Column(Integer)
     active_modes = Column(String)
     mode_times = Column(String)
+    bin_date = Column(Date)
+    bin_info = Column(String)

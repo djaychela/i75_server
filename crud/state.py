@@ -18,6 +18,7 @@ def check_if_dj_quote_today(db: Session):
     current_state = get_state(db)
     return current_state.quote_date == date.today()
 
+
 def check_if_other_quote_today(db: Session):
     current_state = get_state(db)
     return current_state.other_quote_date == date.today()
@@ -27,6 +28,7 @@ def update_state_dj_quote_date(db: Session):
     current_state = get_state(db)
     current_state.quote_date = datetime.today()
     db.commit()
+
 
 def update_state_other_quote_date(db: Session):
     current_state = get_state(db)
@@ -66,13 +68,16 @@ def get_current_other_quote_id(db):
     current_state = get_state(db)
     return current_state.current_other_quote_id
 
+
 def get_active_modes(db):
     current_state = get_state(db)
     return json.loads(current_state.active_modes)
 
+
 def get_mode_times(db):
     current_state = get_state(db)
     return json.loads(current_state.mode_times)
+
 
 def store_active_modes(db: Session, active_modes: list):
     current_state = get_state(db)
@@ -81,10 +86,30 @@ def store_active_modes(db: Session, active_modes: list):
     db.commit()
     return json.loads(current_state.active_modes)
 
+
 def store_mode_times(db: Session, mode_times: dict):
     current_state = get_state(db)
     mode_times_json = json.dumps(mode_times)
     current_state.mode_times = mode_times_json
     db.commit()
     return json.loads(current_state.mode_times)
-    
+
+def check_if_bin_date_today(db: Session):
+    current_state = get_state(db)
+    return current_state.quote_date == date.today()
+
+def set_bin_date_to_today(db: Session):
+    current_state = get_state(db)
+    current_state.bin_date = date.today()
+    db.commit()
+    return current_state.bin_date
+
+def store_bin_info(db: Session, bin_info: list):
+    current_state = get_state(db)
+    current_state.bin_info = json.dumps(bin_info)
+    db.commit()
+    return json.loads(current_state.bin_info)
+
+def get_bin_info(db: Session):
+    current_state = get_state(db)
+    return json.loads(current_state.bin_info)
