@@ -5,6 +5,8 @@ from datetime import datetime, date
 
 from pydantic import BaseModel
 
+import json
+
 from .. import models
 
 
@@ -63,3 +65,26 @@ def get_current_dj_author_id(db):
 def get_current_other_quote_id(db):
     current_state = get_state(db)
     return current_state.current_other_quote_id
+
+def get_active_modes(db):
+    current_state = get_state(db)
+    return json.loads(current_state.active_modes)
+
+def get_mode_times(db):
+    current_state = get_state(db)
+    return json.loads(current_state.mode_times)
+
+def store_active_modes(db: Session, active_modes: list):
+    current_state = get_state(db)
+    active_modes_json = json.dumps(active_modes)
+    current_state.active_modes = active_modes_json
+    db.commit()
+    return json.loads(current_state.active_modes)
+
+def store_mode_times(db: Session, mode_times: dict):
+    current_state = get_state(db)
+    mode_times_json = json.dumps(mode_times)
+    current_state.mode_times = mode_times_json
+    db.commit()
+    return json.loads(current_state.mode_times)
+    

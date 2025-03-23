@@ -47,4 +47,5 @@ class State(Base):
     current_dj_quote_id = Column(Integer)
     current_dj_author_id = Column(Integer)
     current_other_quote_id = Column(Integer)
-
+    active_modes = Column(String)
+    mode_times = Column(String)

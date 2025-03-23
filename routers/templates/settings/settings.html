@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+   {% include 'navbar.html' %}
+
+   <div class="container" style="text-align: center;">
+      <h1>Settings</h1>
+      <form method="post" action='/settings/settings/'>
+
+         <div class="stack" style="text-align: center;">
+            <table style="margin: 0 auto;">
+               <tr>
+                  <th>Modes</th>
+                  <th>Active</th>
+                  <th>Time</th>
+               </tr>
+               {% for mode, active in active_modes.items() %}
+               <tr>
+                  <td>
+                     {{ mode }}
+                  </td>
+
+                  <td>
+                     <label>
+                        {% if active %}
+                        <input type="checkbox" id="{{ mode }}" name="{{ mode }}" value="true" checked />
+                        {% else %}
+                        <input type="checkbox" id="{{ mode }}" name="{{ mode }}" value="true" />
+                        {% endif %}
+                        <span class="checkable"></span>
+                     </label>
+                  </td>
+                  <td>
+                     <input type="number" id="{{ mode }}_time" name="{{ mode }}_time" min="10" max="100"
+                        value="{{ mode_times.get(mode) }}" />
+                  </td>
+               </tr>
+
+               {% endfor %}
+            </table>
+         </div>
+         <input class="submit" type="submit" value="Save Values">
+      </form>
+   </div>
+
+
+</body>
+
+</html>

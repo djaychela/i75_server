@@ -10,6 +10,7 @@ def get_all_images(db: Session):
 
 def get_random_image_filename(db: Session):
     image = db.query(models.ImageData).order_by(func.random()).first()
+    print(f"***  {image.id=}, {image.filename=} ***")
     return f"{image.filename}"
 
 
