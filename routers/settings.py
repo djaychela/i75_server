@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Request, Form
+from fastapi import APIRouter, Depends, Request, Form, HTTPException, status, FastAPI, File, UploadFile
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import (
     JSONResponse,
     HTMLResponse,
@@ -6,11 +7,18 @@ from fastapi.responses import (
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
+import secrets
+import aiofiles
+
+from typing import Annotated
+
 from datetime import datetime
 from pathlib import Path
 
 from ..crud import state
 from ..dependencies import get_db
+
+security = HTTPBasic()
 
 ALL_MODES = [
     "digital_clock_12",
@@ -37,8 +45,34 @@ templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 router = APIRouter(prefix="/settings")
 
+def get_current_username(
+    credentials: Annotated[HTTPBasicCredentials, Depends(security)],
+):
+    current_username_bytes = credentials.username.encode("utf8")
+    correct_username_bytes = b"tammie"
+    is_correct_username = secrets.compare_digest(
+        current_username_bytes, correct_username_bytes
+    )
+    current_password_bytes = credentials.password.encode("utf8")
+    correct_password_bytes = b"gggg"
+    is_correct_password = secrets.compare_digest(
+        current_password_bytes, correct_password_bytes
+    )
+    if not (is_correct_username and is_correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
-@router.get("/", response_class=JSONResponse)
+
+@router.get("/")
+async def index(request: Request, db: Session = Depends(get_db)):
+    return templates.TemplateResponse("settings/settings.html", {"request": request})
+
+
+@router.get("/json", response_class=JSONResponse)
 async def get_settings(request: Request, db: Session = Depends(get_db)):
     date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     display_time = 10
@@ -53,8 +87,9 @@ async def get_settings(request: Request, db: Session = Depends(get_db)):
     return settings_dict
 
 
-@router.get("/settings", response_class=HTMLResponse)
-async def settings(request: Request, db: Session = Depends(get_db)):
+@router.get("/modules", response_class=HTMLResponse)
+# async def settings(username: Annotated[str, Depends(get_current_username)], request: Request, db: Session = Depends(get_db)):
+async def modules(request: Request, db: Session = Depends(get_db)):
     current_state = state.get_state(db)
     current_active_modes = state.get_active_modes(db)
     active_modes = {}
@@ -65,7 +100,7 @@ async def settings(request: Request, db: Session = Depends(get_db)):
             active_modes[mode] = False
     mode_times = state.get_mode_times(db)
     return templates.TemplateResponse(
-        "settings/settings.html",
+        "settings/modules.html",
         {
             "request": request,
             "active_modes": active_modes,
@@ -74,7 +109,7 @@ async def settings(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.post("/settings", response_class=HTMLResponse)
+@router.post("/modules", response_class=HTMLResponse)
 async def store_settings(
     request: Request,
     db: Session = Depends(get_db),
@@ -164,10 +199,27 @@ async def store_settings(
             active_modes[mode] = False
 
     return templates.TemplateResponse(
-        "settings/settings.html",
+        "settings/modules.html",
         {
             "request": request,
             "active_modes": active_modes,
             "mode_times": updated_mode_times,
         },
     )
+
+
+@router.get("/database")
+async def database(request: Request, db: Session = Depends(get_db)):
+    return templates.TemplateResponse("settings/database.html", {"request": request})
+
+
+@router.post("/uploadfile/", response_class=HTMLResponse)
+async def create_upload_file(request: Request, file: UploadFile):
+    # replace database file...
+    file_path = Path(__file__).resolve().parent.parent / "storage" / "i75data.db"
+    print(f"{file_path=}")
+    async with aiofiles.open(file_path, 'wb') as out_file:
+        content = await file.read()  # async read
+        await out_file.write(content)  # async write
+
+    return templates.TemplateResponse("settings/database.html", {"request": request})

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <div class="stack" style="text-align: center;">
+        <table style="margin: 0 auto;">
+            <tr>
+                <th>
+                    Database Actions
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <a href="/db_backup/i75data.db" download><button>Download DB
+                        Backup</button></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form action="/settings/uploadfile/" enctype="multipart/form-data" method="post">
+                        <input name="file" type="file" multiple>
+                        <input type="submit" class="warning" value="Upload Database Backup">
+                    </form>
+                    <strong>Warning!</strong> If this file is incorrect, the app will break and you will need to restore from a good backup.
+                </td>
+            </tr>
+            
+    </div>
+
+
+    </table>
+    </div>
+
+
+</body>
