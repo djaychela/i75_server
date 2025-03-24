@@ -121,4 +121,6 @@ A list of lists, with just the bin type and date.  If the date is today or tomor
 uses to change the text to red to highlight it, and placed at the front of the list.  The API serves the dates in 
 an unpredictable order (in terms of dates), and I didn't code anything else to sort them.
 
+The function either serves up the stored info (if it's been checked today), or formats and stores it, and updates
+the date and info in the state database.  This is to avoid hammering the API and getting banned!
 """

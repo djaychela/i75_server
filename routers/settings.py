@@ -27,6 +27,7 @@ ALL_MODES = [
     "car",
     "note",
     "bin_day",
+    "event",
 ]
 
 
@@ -40,7 +41,6 @@ router = APIRouter(prefix="/settings")
 async def get_settings(request: Request, db: Session = Depends(get_db)):
     date_time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
     display_time = 10
-    # test = state.store_active_modes(db)
     active_modes = state.get_active_modes(db)
     mode_times = state.get_mode_times(db)
     settings_dict = {
@@ -62,7 +62,7 @@ async def settings(request: Request, db: Session = Depends(get_db)):
             active_modes[mode] = True
         else:
             active_modes[mode] = False
-    mode_times = {mode: 60 for mode in ALL_MODES}
+    mode_times = state.get_mode_times(db)
     return templates.TemplateResponse(
         "settings/settings.html",
         {
@@ -91,6 +91,7 @@ async def store_settings(
     car: str = Form(""),
     note: str = Form(""),
     bin_day: str = Form(""),
+    event: str = Form(""),
     digital_clock_12_time: int = Form(""),
     quote_viewer_time: int = Form(""),
     cubes_time: int = Form(""),
@@ -105,6 +106,7 @@ async def store_settings(
     car_time: int = Form(""),
     note_time: int = Form(""),
     bin_day_time: int = Form(""),
+    event_time: int = Form(""),
 ):
 
     modes_to_check = {
@@ -122,6 +124,7 @@ async def store_settings(
         "car": car,
         "note": note,
         "bin_day": bin_day,
+        "event": event,
     }
 
     times_to_check = {
@@ -139,6 +142,7 @@ async def store_settings(
         "car": car_time,
         "note": note_time,
         "bin_day": bin_day_time,
+        "event": event_time,
     }
 
     modes_from_form = [key for key, value in modes_to_check.items() if value == "true"]

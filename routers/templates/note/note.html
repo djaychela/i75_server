@@ -2,32 +2,35 @@
 <html>
 
 <head>
-   <meta charset="utf-8">
-   <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-   {% include 'navbar.html' %}
+    {% include 'navbar.html' %}
 
-   <div class="container" style="text-align: center;">
-    <h1>Note</h1>
-    <form method="post" action='/note/'>
-        <div class="stack" style="text-align: center;">
-            <table style="margin: 0 auto;">
-               <tr>
-                  <th>Note</th>
-                </tr>
-                <tr>
-                    <td>
-                    <textarea type="text" id="note_text" name="note_text" cols="40" rows="10"/>{{ current_note.text }}</textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="submit" type="submit" value="Save Note">
-                    </td>
-                </tr>
-
+    <div class="container" style="text-align: center;">
+        <h1>Note</h1>
+        <form method="post" action='/note/'>
+            <div class="stack" style="text-align: center;">
+                <table style="margin: 0 auto;">
+                    <tr>
+                        <th>Note</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea type="text" id="note_text" name="note_text" cols="40" rows="10" />{{
+                            current_note.text }}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="submit" type="submit" value="Save Note">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
 </body>

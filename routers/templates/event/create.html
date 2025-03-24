@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+   {% include 'navbar.html' %}
+
+   <div class="container" style="text-align: center;">
+      <h1>Create an Event</h1>
+      <form method="post" action='/event/create'>
+         <div class="stack" style="text-align: center;">
+            <table style="margin: 0 auto;">
+               <tr>
+                  <th>Note</th>
+               </tr>
+               <tr>
+                  <td>
+                     <label for="event_date">Event date:</label>
+
+                     <input type="date" id="event_date" name="event_date" value={{ today }} min={{ today }} />
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <textarea type="text" id="event_text" name="event_text" cols="40" rows="5" required /></textarea>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <label>
+                        <input type="checkbox" id="repeating" name="repeating" value="true" />
+                        <span class="checkable">Repeating</span>
+                     </label>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <input class="submit" type="submit" value="Save Event">
+                  </td>
+               </tr>
+            </table>
+         </div>
+      </form>
+
+
+
+</body>

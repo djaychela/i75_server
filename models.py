@@ -23,14 +23,6 @@ class OtherQuote(Base):
     quote = Column(String, index=True)
     author = Column(String, index=True)
 
-class Reminder(Base):
-    __tablename__ = "reminder_table"
-
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    text = Column(String, index=True)
-    date = Column(String, index=True)
-    time = Column(String, index=True)
-
 class Note(Base):
     __tablename__ = "note_table"
 
@@ -57,3 +49,11 @@ class State(Base):
     mode_times = Column(String)
     bin_date = Column(Date)
     bin_info = Column(String)
+
+class Event(Base):
+    __tablename__ = "event_table"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    text = Column(String, index=True)
+    date = Column(Date)
+    repeating = Column(Boolean)

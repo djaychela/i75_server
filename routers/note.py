@@ -41,10 +41,4 @@ async def edit_note(
 @router.get("/json", response_class=JSONResponse)
 async def get_settings(request: Request, db: Session = Depends(get_db)):
     current_note = note.get_note(db)
-    # note_dict = {
-    #     "datetime": date_time,
-    #     "display_time": display_time,
-    #     "active_modes": active_modes,
-    #     "mode_times": mode_times,
-    # }
     return current_note

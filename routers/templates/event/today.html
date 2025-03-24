@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <div class="stack" style="text-align: center;">
+        <h1>Today's Events</h1>
+        <div class="stack" style="text-align: center;"><a href="/event/create"><button>Create a New
+                    Event</button></a></div>
+        <form action="/event/delete_event" method="post">
+            <table class="primary" style="margin: 0 auto;">
+                <tr>
+                    <th>Date</th>
+                    <th>Text</th>
+                    <th>Repeating</th>
+                    <th>Delete</th>
+                </tr>
+                {% for event in events %}
+                <tr>
+                    <td>
+                        {{ event.date }}
+                    </td>
+                    <td>
+                        {{ event.text }}
+                    </td>
+                    <td>
+                        {% if event.repeating %}
+                        <label>
+                            <input type="checkbox" id="repeating" name="repeating" value="true" checked disabled/>
+                            <span class="checkable"></span>
+                         </label>
+                        {% else %}
+                        <label>
+                            <input type="checkbox" id="repeating" name="repeating" value="true" disabled/>
+                            <span class="checkable"></span>
+                         </label>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button type="submit" name="action" class="error" value="delete_{{ event.id }}">Delete {{
+                            event.id
+                            }}</button>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </form>
+    </div>
+</body>
