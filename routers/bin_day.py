@@ -60,3 +60,65 @@ async def get_bin_day(request: Request, db: Session = Depends(get_db)):
         state.set_bin_date_to_today(db)
         state.store_bin_info(db, bin_data_list)
         return bin_data_list
+
+
+"""
+Notes for someone (if API needs fixing in the future)
+
+current API_URL is from the page at
+
+https://online.bcpcouncil.gov.uk/bindaylookup/
+
+Once the address is put in, you get the bin days.  If you look at network traffic in the browser dev
+tools when the page loads, there is a GET request with 200 status to the needed URL:
+
+https://online.bcpcouncil.gov.uk/bcp-apis/?api=BinDayLookup&uprn=100040763050
+
+(my assumption is that the property is encoded in the uprn at the end, and each property is different)
+
+The API response from BCP's site looks like this (with lots of line breaks in, so I'm assuming it's all
+a bit janky!):
+
+[
+  {
+    "BinType": "Food Waste",
+    "PdfLink": "",
+    "Communal": "false",
+    "Next": "3/28/2025 12:00:00 AM",
+    "Subsequent": "4/3/2025 11:00:00 PM"
+  },
+  {
+    "BinType": "Garden Waste",
+    "PdfLink": "https://www.bcpcouncil.gov.uk/gardenbincollectionsMon1",
+    "Communal": "false",
+    "Next": "3/24/2025 12:00:00 AM",
+    "Subsequent": "4/6/2025 11:00:00 PM"
+  },
+  {
+    "BinType": "Recycling",
+    "PdfLink": "https://www.bcpcouncil.gov.uk/bincollectionbcfri1",
+    "Communal": "false",
+    "Next": "3/28/2025 12:00:00 AM",
+    "Subsequent": "4/10/2025 11:00:00 PM"
+  },
+  {
+    "BinType": "Rubbish",
+    "PdfLink": "",
+    "Communal": "false",
+    "Next": "4/3/2025 11:00:00 PM",
+    "Subsequent": "4/17/2025 11:00:00 PM"
+  }
+]
+
+I was going to code the display to get this info directly, but thought it better for the server to do
+it and hand the display something it can process simply.
+
+So the code reformats the dates, and returns this format (for the data given above):
+
+[["Garden Waste","Today"],["Food Waste","Mar 28th"],["Recycling","Mar 28th"],["Rubbish","Apr 3rd"]]
+
+A list of lists, with just the bin type and date.  If the date is today or tomorrow then it is replaced with that text, which the display 
+uses to change the text to red to highlight it, and placed at the front of the list.  The API serves the dates in 
+an unpredictable order (in terms of dates), and I didn't code anything else to sort them.
+
+"""

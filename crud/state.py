@@ -96,7 +96,7 @@ def store_mode_times(db: Session, mode_times: dict):
 
 def check_if_bin_date_today(db: Session):
     current_state = get_state(db)
-    return current_state.quote_date == date.today()
+    return current_state.bin_date == date.today()
 
 def set_bin_date_to_today(db: Session):
     current_state = get_state(db)
