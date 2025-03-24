@@ -30,7 +30,7 @@
                         {{ event.date }}
                     </td>
                     <td>
-                        {{ event.text }}
+                        {{ event.text[:80] }}
                     </td>
                     <td>
                         {% if event.repeating %}
@@ -46,9 +46,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <button type="submit" name="action" class="error" value="delete_{{ event.id }}">Delete {{
-                            event.id
-                            }}</button>
+                        <button type="submit" name="action" class="error" value="delete_{{ event.id }}">Delete</button>
                     </td>
                 </tr>
 

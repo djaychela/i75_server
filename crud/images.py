@@ -28,6 +28,20 @@ def store_new_image(db: Session, text, filename):
     db.refresh(new_image)
     return new_image
 
+def store_new_wifi_image(db: Session, ssid, password, filename):
+    wifi_image = db.query(models.WifiImageData).filter(models.WifiImageData.id == 1).first()
+    wifi_image.ssid = ssid
+    wifi_image.password = password
+    wifi_image.filename = filename
+    db.add(wifi_image)
+    db.commit()
+    db.refresh(wifi_image)
+    return wifi_image
+
+def get_wifi_image_data(db: Session):
+    wifi_image = db.query(models.WifiImageData).filter(models.WifiImageData.id == 1).first()
+    return wifi_image
+
 
 def delete_image_by_id(db: Session, image_id: int):
     to_delete = (

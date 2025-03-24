@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <!DOCTYPE html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <script>
+            function submitForm() {
+                let form = document.getElementById('form')
+                let data = new FormData(form)
+                fetch('../images/submit_wifi', {
+                    method: 'POST',
+                    body: data
+                }).then(res => {
+                    res.json().then(result => {
+                        let alert = document.getElementById('alert')
+                        alert.children[0].innerText = `Upload success!\nSSID: ${result.ssid}\nPassword: ${result.password}\nImage: ${result.image}`
+                        alert.children[1].src = `/uploads/images/${result.image}`
+                        alert.classList.remove('d-none')
+                        form.reset()
+                    })
+                })
+                return false
+            }
+        </script>
+    </head>
+
+    <body>
+        <div style="text-align: center;">
+            <div class="stack" style="text-align: center;">
+                <table class="primary" style="margin: 0 auto;">
+                    <tr>
+                        <th>Upload Wifi QR Code</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form id="form" onsubmit="return submitForm()">
+                                <div class="stack" style="text-align: center; width:30%;min-width:400px;">
+                                    <label class="form-label" for="ssid">SSID</label>
+                                    <input id="ssid" name="ssid" class="form-control form-control-sm" required />
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stack" style="text-align: center; width:30%;min-width:400px;">
+                                <label class="form-label" for="password">Password</label>
+                                <input id="password" name="password" class="form-control form-control-sm" required />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stack" style="text-align: center; width:30%;min-width:50px;">
+                                <label class="form-label" for="image">Image</label>
+                                <input type="file" accept="image/*" id="image" name="image"
+                                    class="form-control form-control-sm"
+                                    style="text-align: center; width:30%;min-width:400px;" required />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="stack" style="text-align: center;">
+                                <button class="btn btn-sm btn-primary">Submit</button>
+                            </div>
+                        </td>
+                    </tr>
+            </div>
+            </form>
+            </table>
+            <div class="stack" style="text-align: center;"><a href="/images/view_wifi_qr"><button>View Current Wifi QR Code</button></a></div>
+            <div class="stack" style="text-align: center;"><a href="/images"><button class='button success'>Cancel</button></a></div>
+            <div id="alert" class="stack" style="text-align: center;">
+                <p></p>
+                <img id="img" width="200px" />
+            </div>
+        </div>
+        </div>
+    </body>
+
+</html>

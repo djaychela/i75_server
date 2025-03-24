@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <div class="stack" style="text-align: center;">
+        <h1>Wifi QR Code</h1>
+        <div class="stack" style="text-align: center;"><a href="/images/upload_wifi"><button>Upload a New QR
+                    Code</button></a></div>
+        <form action="/images/delete_image" method="post">
+            <table class="primary" style="margin: 0 auto;">
+                <tr>
+                    <th>Image</th>
+                    <th>SSID</th>
+                    <th>Password</th>
+                </tr>
+                <tr>
+                    <td>
+                        <img id="img" width="200px" src="/uploads/images/{{ wifi_image.filename }}" />
+                    </td>
+                    <td>
+                        {{ wifi_image.ssid }}
+                    </td>
+                    <td>
+                        {{ wifi_image.password }}
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+    </div>
+
+</body>

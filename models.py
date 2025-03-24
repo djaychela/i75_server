@@ -36,6 +36,14 @@ class ImageData(Base):
     text = Column(String, index=True)
     filename = Column(String)
 
+class WifiImageData(Base):
+    __tablename__ = "wifi_imagedata_table"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    ssid = Column(String, index=True)
+    password = Column(String)
+    filename = Column(String)
+
 class State(Base):
     __tablename__ = "state_table"
 

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Form, UploadFile
 from fastapi.responses import (
     HTMLResponse,
-    PlainTextResponse,
+    JSONResponse,
     RedirectResponse,
     FileResponse,
 )
@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from ..dependencies import get_db
 
-from ..schemas.image import ImageFile
+from ..schemas.image import ImageFile, WifiQRImageFile
 
 from ..crud import images
 from ..helpers import image_helpers
@@ -34,6 +34,10 @@ async def index(request: Request, db: Session = Depends(get_db)):
 async def upload(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse("images/upload.html", {"request": request})
 
+@router.get("/upload_wifi")
+async def upload(request: Request, db: Session = Depends(get_db)):
+    return templates.TemplateResponse("images/upload_wifi.html", {"request": request})
+
 
 @router.post("/submit")
 async def submit(
@@ -51,6 +55,20 @@ async def submit(
     images.store_new_image(db, image_text.name, new_filename)
     return {"name": image_text.name, "image": new_filename}
 
+@router.post("/submit_wifi")
+async def submit_wifi(
+    image: UploadFile,
+    request: Request,
+    image_text: WifiQRImageFile = Depends(WifiQRImageFile),
+    db: Session = Depends(get_db),
+):
+    new_filename = "wifi_qr.png"
+    file_path = upload_path / new_filename
+    with open(file_path, "wb") as f:
+        f.write(await image.read())
+    images.store_new_wifi_image(db, image_text.ssid, image_text.password, new_filename)
+    return {"ssid": image_text.ssid, "password": image_text.password, "image": new_filename}
+
 
 @router.get("/random")
 async def index(request: Request, db: Session = Depends(get_db)):
@@ -65,6 +83,19 @@ async def list_quotes(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         "images/list.html", {"request": request, "images": image_list}
     )
+
+@router.get("/view_wifi_qr", response_class=HTMLResponse)
+async def list_quotes(request: Request, db: Session = Depends(get_db)):
+    wifi_image = images.get_wifi_image_data(db)
+    print(wifi_image)
+    return templates.TemplateResponse(
+        "images/view_wifi_qr.html", {"request": request, "wifi_image": wifi_image}
+    )
+
+@router.get("/view_wifi_json", response_class=JSONResponse)
+async def random(request: Request, db: Session = Depends(get_db)):
+    wifi_image = images.get_wifi_image_data(db)
+    return wifi_image
 
 
 @router.post("/delete_image", response_class=HTMLResponse)

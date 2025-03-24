@@ -28,6 +28,7 @@ ALL_MODES = [
     "note",
     "bin_day",
     "event",
+    "wifi",
 ]
 
 
@@ -92,6 +93,7 @@ async def store_settings(
     note: str = Form(""),
     bin_day: str = Form(""),
     event: str = Form(""),
+    wifi: str = Form(""),
     digital_clock_12_time: int = Form(""),
     quote_viewer_time: int = Form(""),
     cubes_time: int = Form(""),
@@ -107,6 +109,7 @@ async def store_settings(
     note_time: int = Form(""),
     bin_day_time: int = Form(""),
     event_time: int = Form(""),
+    wifi_time: int = Form(""),
 ):
 
     modes_to_check = {
@@ -125,6 +128,7 @@ async def store_settings(
         "note": note,
         "bin_day": bin_day,
         "event": event,
+        "wifi": wifi,
     }
 
     times_to_check = {
@@ -143,6 +147,7 @@ async def store_settings(
         "note": note_time,
         "bin_day": bin_day_time,
         "event": event_time,
+        "wifi" : wifi_time,
     }
 
     modes_from_form = [key for key, value in modes_to_check.items() if value == "true"]

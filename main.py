@@ -27,6 +27,7 @@ app = FastAPI()
 
 BASE_PATH = Path(__file__).resolve().parent
 upload_path = BASE_PATH / "uploads"
+db_path = BASE_PATH / "storage"
 
 assets_path = str(pathlib.Path(__file__).parent.resolve() / "static")
 if path.exists(assets_path + "/swagger-ui.css") and path.exists(
@@ -34,6 +35,7 @@ if path.exists(assets_path + "/swagger-ui.css") and path.exists(
 ):
     app.mount("/assets", StaticFiles(directory=assets_path), name="static")
     app.mount("/uploads", StaticFiles(directory=upload_path))
+    app.mount("/db_backup", StaticFiles(directory=db_path))
 
     def swagger_monkey_patch(*args, **kwargs):
         return get_swagger_ui_html(
