@@ -22,7 +22,7 @@ import aiofiles
 
 from typing import Annotated
 
-from datetime import datetime, time
+from datetime import datetime, time, timedelta, date
 from pathlib import Path
 
 from ..crud import state
@@ -270,6 +270,9 @@ async def post_times(
 ):
     display_start = datetime.strptime(start_time, "%H:%M").time()
     display_end = datetime.strptime(end_time, "%H:%M").time()
+    if display_start > display_end:
+        display_end = datetime.combine(date.today(), display_start) + timedelta(hours=1)
+        display_end = display_end.time()
     display_start, display_end = state.set_display_times(db, display_start, display_end)
     display_start = time.strftime(display_start, "%H:%M")
     display_end = time.strftime(display_end, "%H:%M")

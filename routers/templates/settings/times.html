@@ -22,18 +22,20 @@
             <form action="/settings/times/" method="post">
                 <tr>
                     <td>
+                        <label class="form-label" for="start_time">Start</label>
                         <input type="time" id="start_time" name="start_time" value="{{ display_start }}" />
                     </td>
                 </tr>
                 <tr>
                     <td>
+                        <label class="form-label" for="end_time">End</label>
                         <input type="time" id="end_time" name="end_time" value="{{ display_end }}" />
                     </td>
                 </tr>
                 <tr>
                     <td>
 
-                        <input type="submit" class="warning" value="Set Times">
+                        <input type="submit" value="Set Times">
 
                     </td>
             </form>
