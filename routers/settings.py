@@ -55,7 +55,6 @@ NON_COLOUR_MODES = [
     "cubes",
     "balls",
     "rainbow",
-    "warp_speed",
     "jpg_viewer",
     "jpg_viewer_2",
     "spiral",
