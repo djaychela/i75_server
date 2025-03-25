@@ -21,6 +21,7 @@
                   <th>Modes</th>
                   <th>Active</th>
                   <th>Time</th>
+                  <th>Colour</th>
                </tr>
                {% for mode, active in active_modes.items() %}
                <tr>
@@ -42,6 +43,15 @@
                      <input type="number" id="{{ mode }}_time" name="{{ mode }}_time" min="10" max="100"
                         value="{{ mode_times.get(mode) }}" />
                   </td>
+                  {% if mode not in non_colour_modes %}
+                  <td>
+                     <input type="color" id="{{ mode }}_colour" name="{{ mode }}_colour" value="{{ mode_colours.get(mode) }}" />
+                  </td>
+                  {% else %}
+                  <td>
+                     <input type="color" id="{{ mode }}_colour" name="{{ mode }}_colour" value="#FFFFFF" disabled />
+                  </td>
+                  {% endif %}
                </tr>
 
                {% endfor %}

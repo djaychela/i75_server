@@ -59,6 +59,7 @@ class State(Base):
     bin_info = Column(String)
     display_start = Column(Time)
     display_end = Column(Time)
+    mode_colours = Column(String)
 
 class Event(Base):
     __tablename__ = "event_table"

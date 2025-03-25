@@ -27,6 +27,7 @@ from pathlib import Path
 
 from ..crud import state
 from ..dependencies import get_db
+from ..helpers import state_helpers
 
 security = HTTPBasic()
 
@@ -48,6 +49,16 @@ ALL_MODES = [
     "event",
     "wifi",
     "weather",
+]
+
+NON_COLOUR_MODES = [
+    "cubes",
+    "balls",
+    "rainbow",
+    "warp_speed",
+    "jpg_viewer",
+    "jpg_viewer_2",
+    "spiral",
 ]
 
 
@@ -94,11 +105,13 @@ async def get_settings(request: Request, db: Session = Depends(get_db)):
     display_start = time.strftime(display_start, "%H"), time.strftime(display_start, "%M")
     display_end = time.strftime(display_end, "%H"), time.strftime(display_end, "%M")
     display_active_times = [display_start, display_end]
+    mode_colours = {key : state_helpers.hex_to_decimal(value) for key,value in state.get_mode_colours(db).items()if key not in NON_COLOUR_MODES}
     settings_dict = {
         "datetime": date_time,
         "display_time": display_time,
         "active_modes": active_modes,
         "mode_times": mode_times,
+        "mode_colours": mode_colours,
         "display_active": display_active_times,
     }
     return settings_dict
@@ -116,12 +129,15 @@ async def modules(request: Request, db: Session = Depends(get_db)):
         else:
             active_modes[mode] = False
     mode_times = state.get_mode_times(db)
+    mode_colours = state.get_mode_colours(db)
     return templates.TemplateResponse(
         "settings/modules.html",
         {
             "request": request,
             "active_modes": active_modes,
             "mode_times": mode_times,
+            "mode_colours": mode_colours,
+            "non_colour_modes": NON_COLOUR_MODES,
         },
     )
 
@@ -164,6 +180,23 @@ async def store_settings(
     event_time: int = Form(""),
     wifi_time: int = Form(""),
     weather_time: int = Form(""),
+    digital_clock_12_colour: str = Form(""),
+    quote_viewer_colour: str = Form(""),
+    cubes_colour: str = Form(""),
+    jpg_viewer_colour: str = Form(""),
+    balls_colour: str = Form(""),
+    rainbow_colour: str = Form(""),
+    digital_clock_24_colour: str = Form(""),
+    famous_quote_viewer_colour: str = Form(""),
+    warp_speed_colour: str = Form(""),
+    jpg_viewer_2_colour: str = Form(""),
+    spiral_colour: str = Form(""),
+    car_colour: str = Form(""),
+    note_colour: str = Form(""),
+    bin_day_colour: str = Form(""),
+    event_colour: str = Form(""),
+    wifi_colour: str = Form(""),
+    weather_colour: str = Form(""),
 ):
 
     modes_to_check = {
@@ -206,11 +239,34 @@ async def store_settings(
         "weather": weather_time,
     }
 
+    colours_to_check = {
+        "digital_clock_12": digital_clock_12_colour,
+        "quote_viewer": quote_viewer_colour,
+        "cubes": cubes_colour,
+        "jpg_viewer": jpg_viewer_colour,
+        "balls": balls_colour,
+        "rainbow": rainbow_colour,
+        "digital_clock_24": digital_clock_24_colour,
+        "famous_quote_viewer": famous_quote_viewer_colour,
+        "warp_speed": warp_speed_colour,
+        "jpg_viewer_2": jpg_viewer_2_colour,
+        "spiral": spiral_colour,
+        "car": car_colour,
+        "note": note_colour,
+        "bin_day": bin_day_colour,
+        "event": event_colour,
+        "wifi": wifi_colour,
+        "weather": weather_colour,
+    }
+
     modes_from_form = [key for key, value in modes_to_check.items() if value == "true"]
     updated_modes = state.store_active_modes(db, modes_from_form)
 
     times_from_form = {key: value for key, value in times_to_check.items()}
     updated_mode_times = state.store_mode_times(db, times_from_form)
+
+    colours_from_form = {key: value for key, value in colours_to_check.items()}
+    updated_mode_colours = state.store_mode_colours(db, colours_from_form)
 
     active_modes = {}
     for mode in ALL_MODES:
@@ -225,6 +281,8 @@ async def store_settings(
             "request": request,
             "active_modes": active_modes,
             "mode_times": updated_mode_times,
+            "mode_colours": updated_mode_colours,
+            "non_colour_modes": NON_COLOUR_MODES,
         },
     )
 

@@ -124,3 +124,14 @@ def set_display_times(db: Session, display_start, display_end):
     current_state.display_end = display_end
     db.commit()
     return (current_state.display_start, current_state.display_end)
+
+def get_mode_colours(db):
+    current_state = get_state(db)
+    return json.loads(current_state.mode_colours)
+
+def store_mode_colours(db: Session, mode_colours: dict):
+    current_state = get_state(db)
+    mode_colours_json = json.dumps(mode_colours)
+    current_state.mode_colours = mode_colours_json
+    db.commit()
+    return json.loads(current_state.mode_colours)
