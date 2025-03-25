@@ -113,3 +113,14 @@ def store_bin_info(db: Session, bin_info: list):
 def get_bin_info(db: Session):
     current_state = get_state(db)
     return json.loads(current_state.bin_info)
+
+def get_display_times(db: Session):
+    current_state = get_state(db)
+    return (current_state.display_start, current_state.display_end)
+
+def set_display_times(db: Session, display_start, display_end):
+    current_state = get_state(db)
+    current_state.display_start = display_start
+    current_state.display_end = display_end
+    db.commit()
+    return (current_state.display_start, current_state.display_end)

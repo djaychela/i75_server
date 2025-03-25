@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, JSON, Boolean, Date
+from sqlalchemy import Column, Integer, String, JSON, Boolean, Date, Time
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .database import Base
@@ -57,6 +57,8 @@ class State(Base):
     mode_times = Column(String)
     bin_date = Column(Date)
     bin_info = Column(String)
+    display_start = Column(Time)
+    display_end = Column(Time)
 
 class Event(Base):
     __tablename__ = "event_table"

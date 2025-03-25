@@ -1,4 +1,14 @@
-from fastapi import APIRouter, Depends, Request, Form, HTTPException, status, FastAPI, File, UploadFile
+from fastapi import (
+    APIRouter,
+    Depends,
+    Request,
+    Form,
+    HTTPException,
+    status,
+    FastAPI,
+    File,
+    UploadFile,
+)
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import (
     JSONResponse,
@@ -12,7 +22,7 @@ import aiofiles
 
 from typing import Annotated
 
-from datetime import datetime
+from datetime import datetime, time
 from pathlib import Path
 
 from ..crud import state
@@ -45,6 +55,7 @@ BASE_PATH = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 router = APIRouter(prefix="/settings")
+
 
 def get_current_username(
     credentials: Annotated[HTTPBasicCredentials, Depends(security)],
@@ -79,11 +90,16 @@ async def get_settings(request: Request, db: Session = Depends(get_db)):
     display_time = 10
     active_modes = state.get_active_modes(db)
     mode_times = state.get_mode_times(db)
+    display_start, display_end = state.get_display_times(db)
+    display_start = time.strftime(display_start, "%H"), time.strftime(display_start, "%M")
+    display_end = time.strftime(display_end, "%H"), time.strftime(display_end, "%M")
+    display_active_times = [display_start, display_end]
     settings_dict = {
         "datetime": date_time,
         "display_time": display_time,
         "active_modes": active_modes,
         "mode_times": mode_times,
+        "display_active": display_active_times,
     }
     return settings_dict
 
@@ -186,7 +202,7 @@ async def store_settings(
         "note": note_time,
         "bin_day": bin_day_time,
         "event": event_time,
-        "wifi" : wifi_time,
+        "wifi": wifi_time,
         "weather": weather_time,
     }
 
@@ -223,8 +239,45 @@ async def create_upload_file(request: Request, file: UploadFile):
     # replace database file...
     file_path = Path(__file__).resolve().parent.parent / "storage" / "i75data.db"
     print(f"{file_path=}")
-    async with aiofiles.open(file_path, 'wb') as out_file:
+    async with aiofiles.open(file_path, "wb") as out_file:
         content = await file.read()  # async read
         await out_file.write(content)  # async write
 
     return templates.TemplateResponse("settings/database.html", {"request": request})
+
+
+@router.get("/times")
+async def get_times(request: Request, db: Session = Depends(get_db)):
+    display_start, display_end = state.get_display_times(db)
+    display_start = time.strftime(display_start, "%H:%M")
+    display_end = time.strftime(display_end, "%H:%M")
+    return templates.TemplateResponse(
+        "settings/times.html",
+        {
+            "request": request,
+            "display_start": display_start,
+            "display_end": display_end,
+        },
+    )
+
+
+@router.post("/times")
+async def post_times(
+    request: Request,
+    db: Session = Depends(get_db),
+    start_time: str = Form(""),
+    end_time: str = Form(""),
+):
+    display_start = datetime.strptime(start_time, "%H:%M").time()
+    display_end = datetime.strptime(end_time, "%H:%M").time()
+    display_start, display_end = state.set_display_times(db, display_start, display_end)
+    display_start = time.strftime(display_start, "%H:%M")
+    display_end = time.strftime(display_end, "%H:%M")
+    return templates.TemplateResponse(
+        "settings/times.html",
+        {
+            "request": request,
+            "display_start": display_start,
+            "display_end": display_end,
+        },
+    )
