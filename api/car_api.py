@@ -40,7 +40,6 @@ def get_car_api_data(db):
     get_data_from_api(charger_url, car_data, "charger_state", "state", "0")
     get_data_from_api(charger_rate_url, car_data, "charger_rate", "state", "0")
     get_data_from_api(battery_api_url, car_data, "attributes", "attributes", "0")
-
-    print(f"{car_data=}")
+    car_data["battery_percentage"] = int(car_data["battery_percentage"])
 
     return car_data
