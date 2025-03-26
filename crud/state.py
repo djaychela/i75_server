@@ -135,3 +135,14 @@ def store_mode_colours(db: Session, mode_colours: dict):
     current_state.mode_colours = mode_colours_json
     db.commit()
     return json.loads(current_state.mode_colours)
+
+def get_car_api_values(db):
+    current_state = get_state(db)
+    return json.loads(current_state.car_api_values)
+
+def store_car_api_values(db: Session, car_api_values: dict):
+    current_state = get_state(db)
+    car_api_values_json = json.dumps(car_api_values)
+    current_state.car_api_values = car_api_values_json
+    db.commit()
+    return json.loads(current_state.car_api_values)

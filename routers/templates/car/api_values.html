@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <div class="stack" style="text-align: center;">
+        <h1>Car > HA API Values</h1>
+        <form action="/car/api_values" method="post">
+            <table class="primary" style="margin: 0 auto;">
+                <tr>
+                    <th>Description</th>
+                
+                    <th>Value</th>
+                </tr>
+                {% for api in api_values %}
+                <tr>
+                    <td>
+                        {{ api.description }}
+                    </td>
+                    <td>
+                        <input type="text" id="{{ api.name }}_value" name="{{ api.name }}_value" size="50" value="{{ api.value }}">
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        <input class="submit" type="submit" value="Save Values">
+                    </td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+
+</body>
