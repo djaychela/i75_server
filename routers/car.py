@@ -26,9 +26,7 @@ templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 @router.get("/api_values")
 async def get_settings(request: Request, db: Session = Depends(get_db)):
     car_api_values = state.get_car_api_values(db)
-    print(f"{car_api_values=}")
     api_base_values = car_helpers.build_api_namedtuple(car_api_values)
-    print(f"{api_base_values=}")
     return templates.TemplateResponse(
         "car/api_values.html", {"request": request, "api_values": api_base_values}
     )
@@ -52,7 +50,6 @@ async def store_settings(
         "zappi_rate_url": zappi_rate_url_value,
     }
     car_api_values = state.store_car_api_values(db, car_api_values_dict)
-    print(f"{car_api_values_dict=}")
     api_base_values = car_helpers.build_api_namedtuple(car_api_values)
     return templates.TemplateResponse(
         "car/api_values.html", {"request": request, "api_values": api_base_values}

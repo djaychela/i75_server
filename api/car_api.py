@@ -1,7 +1,5 @@
 import requests
 
-from ..dependencies import get_db
-
 from ..crud import state
 
 from .keys_etc import HA_TOKEN
@@ -34,12 +32,15 @@ def get_car_api_data(db):
     api_data = state.get_car_api_values(db)
     car_data = {}
     battery_api_url = f"{api_data['ha_base_url']}{api_data['battery_api_url']}"
-    zappi_url = f"{api_data['ha_base_url']}{api_data['zappi_url']}"
+    charger_url = f"{api_data['ha_base_url']}{api_data['charger_url']}"
     charging_api_url = f"{api_data['ha_base_url']}{api_data['charging_api_url']}"
-    zappi_rate_url = f"{api_data['ha_base_url']}{api_data['zappi_rate_url']}"
+    charger_rate_url = f"{api_data['ha_base_url']}{api_data['charger_rate_url']}"
     get_data_from_api(battery_api_url, car_data, "battery_percentage", "state", "0")
-    get_data_from_api(zappi_url, car_data, "zappi_state", "state", "0")
     get_data_from_api(charging_api_url, car_data, "charging_state", "state", "off")
-    get_data_from_api(zappi_rate_url, car_data, "zappi_rate", "state", "0")
+    get_data_from_api(charger_url, car_data, "charger_state", "state", "0")
+    get_data_from_api(charger_rate_url, car_data, "charger_rate", "state", "0")
+    get_data_from_api(battery_api_url, car_data, "attributes", "attributes", "0")
+
+    print(f"{car_data=}")
 
     return car_data
