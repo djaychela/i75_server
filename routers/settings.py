@@ -49,6 +49,7 @@ ALL_MODES = [
     "event",
     "wifi",
     "weather",
+    "ha",
 ]
 
 NON_COLOUR_MODES = [
@@ -162,6 +163,7 @@ async def store_settings(
     event: str = Form(""),
     wifi: str = Form(""),
     weather: str = Form(""),
+    ha: str = Form(""),
     digital_clock_12_time: int = Form(""),
     quote_viewer_time: int = Form(""),
     cubes_time: int = Form(""),
@@ -179,6 +181,7 @@ async def store_settings(
     event_time: int = Form(""),
     wifi_time: int = Form(""),
     weather_time: int = Form(""),
+    ha_time: int = Form(""),
     digital_clock_12_colour: str = Form(""),
     quote_viewer_colour: str = Form(""),
     cubes_colour: str = Form(""),
@@ -196,6 +199,7 @@ async def store_settings(
     event_colour: str = Form(""),
     wifi_colour: str = Form(""),
     weather_colour: str = Form(""),
+    ha_colour: str = Form(""),
 ):
 
     modes_to_check = {
@@ -216,6 +220,7 @@ async def store_settings(
         "event": event,
         "wifi": wifi,
         "weather": weather,
+        "ha": ha,
     }
 
     times_to_check = {
@@ -236,6 +241,7 @@ async def store_settings(
         "event": event_time,
         "wifi": wifi_time,
         "weather": weather_time,
+        "ha": ha_time,
     }
 
     colours_to_check = {
@@ -256,6 +262,7 @@ async def store_settings(
         "event": event_colour,
         "wifi": wifi_colour,
         "weather": weather_colour,
+        "ha": ha_colour,
     }
 
     modes_from_form = [key for key, value in modes_to_check.items() if value == "true"]

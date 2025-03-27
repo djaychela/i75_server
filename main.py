@@ -16,6 +16,7 @@ from .routers import (
     bin_day,
     event,
     car,
+    ha,
 )
 
 from pathlib import Path
@@ -60,3 +61,4 @@ app.include_router(note.router)
 app.include_router(bin_day.router)
 app.include_router(event.router)
 app.include_router(car.router)
+app.include_router(ha.router)

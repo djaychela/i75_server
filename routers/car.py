@@ -38,16 +38,16 @@ async def store_settings(
     db: Session = Depends(get_db),
     ha_base_url_value: str = Form(""),
     battery_api_url_value: str = Form(""),
-    zappi_url_value: str = Form(""),
+    charger_url_value: str = Form(""),
     charging_api_url_value: str = Form(""),
-    zappi_rate_url_value: str = Form(""),
+    charger_rate_url_value: str = Form(""),
 ):
     car_api_values_dict = {
         "ha_base_url": ha_base_url_value,
         "battery_api_url": battery_api_url_value,
-        "zappi_url": zappi_url_value,
+        "charger_url": charger_url_value,
         "charging_api_url": charging_api_url_value,
-        "zappi_rate_url": zappi_rate_url_value,
+        "charger_rate_url": charger_rate_url_value,
     }
     car_api_values = state.store_car_api_values(db, car_api_values_dict)
     api_base_values = car_helpers.build_api_namedtuple(car_api_values)

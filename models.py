@@ -61,6 +61,7 @@ class State(Base):
     display_end = Column(Time)
     mode_colours = Column(String)
     car_api_values = Column(String)
+    ha_api_values = Column(String)
 
 class Event(Base):
     __tablename__ = "event_table"

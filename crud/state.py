@@ -146,3 +146,14 @@ def store_car_api_values(db: Session, car_api_values: dict):
     current_state.car_api_values = car_api_values_json
     db.commit()
     return json.loads(current_state.car_api_values)
+
+def get_ha_api_values(db):
+    current_state = get_state(db)
+    return json.loads(current_state.ha_api_values)
+
+def store_ha_api_values(db: Session, ha_api_values: dict):
+    current_state = get_state(db)
+    ha_api_valuess_json = json.dumps(ha_api_values)
+    current_state.ha_api_values = ha_api_valuess_json
+    db.commit()
+    return json.loads(current_state.ha_api_values)

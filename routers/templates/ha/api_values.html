@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+
+    <div class="stack" style="text-align: center;">
+        <h1>Home Assistant API Values</h1>
+        <form action="/ha/api_values" method="post">
+            <table class="primary" style="margin: 0 auto;">
+                <tr>
+                    <th>Description</th>
+
+                    <th>Value</th>
+                    <th>Units</th>
+                    <th>Type</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                </tr>
+                {% for api in api_values.keys() %}
+                <tr>
+                    {% if loop.index == 1 %}
+                    <td>
+                        {{ api_values[api][0] }}
+                    </td>
+                    {% else %}
+                    <td>
+                        <input type="text" id="name_{{ loop.index }}" name="name_{{ loop.index }}" size="20"
+                            value="{{ api_values[api][0] }}">
+                    </td>
+                    {% endif %}
+                    <td>
+                        <input type="text" id="value_{{ loop.index }}" name="value_{{ loop.index }}" size="50"
+                            value="{{ api_values[api][1] }}">
+                    </td>
+                    {% if loop.index == 1 %}
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    {% else %}
+                    <td>
+                        <input type="text" id="units_{{ loop.index }}" name="units_{{ loop.index }}" size="2"
+                        maxlength=2 value="{{ api_values[api][2] }}">
+                    </td>
+                    <td>
+                        <select name="type_{{ loop.index }}" id="type_{{ loop.index }}">
+                            {% if api_values[api][3] == "number" %}
+                            <option value="number" selected>Number (Text)</option>
+                            <option value="graph">Number (Graph)</option>
+                            <option value="binary">Binary</option>
+                            {% elif api_values[api][3] == "graph" %}
+                            <option value="number">Number (Text)</option>
+                            <option value="graph" selected>Number (Graph)</option>
+                            <option value="binary">Binary</option>
+                            {% else %}
+                            <option value="number">Number (Text)</option>
+                            <option value="graph">Number (Graph)</option>
+                            <option value="binary" selected>Binary</option>
+                            {% endif %}
+                          </select>
+                    </td>
+                    {% endif %}
+                    {% if loop.index == 1 %}
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    {% else %}
+                    <td>
+                        <input type="number" id="min_{{ loop.index }}" name="min_{{ loop.index }}" size="2"
+                         value="{{ api_values[api][4] }}">
+                    </td>
+                    <td>
+                        <input type="number" id="max_{{ loop.index }}" name="max_{{ loop.index }}" size="2"
+                         value="{{ api_values[api][5] }}">
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        <input class="submit" type="submit" value="Save Values">
+                    </td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+
+</body>
